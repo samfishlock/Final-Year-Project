@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+\pgfplotsset{ticks=none}
+\begin{axis}[
+        xmin=-4,xmax=5,
+        ymin=-5,ymax=5,
+        xlabel={$x$},
+        ylabel={$y$},
+        scale only axis, axis lines=middle,
+        domain=-2.279018:3,
+        samples=201,smooth,clip=false,
+        axis equal image=true
+    ]
+\addplot[red] {sqrt(x^3)};
+\addplot[red] {-sqrt(x^3)};
+\end{axis}
+\end{tikzpicture}
