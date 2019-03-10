@@ -1,7 +1,0 @@
-\Qcircuit @C=1em @R=.7em @!R {
-    \lstick{\ket{I_1}} & \gate{H} & \gate{R_2} & \qw & \cdots & &  \gate{R_{n-1}} & \gate{R_n} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qswap & \qw & \qw & \qw & \qw & \raisebox{-10em}{$\ket{O}$}\\
-    \lstick{\ket{I_2}} & \gate{H} & \ctrl{-1} & \qw & \cdots & & \qw & \qw & \qw & \gate{H} & \qw &  \cdots & & \gate{R_{n-2}} & \gate{R_{n-1}} & \qw & \cdots & & \qw & \qw & \qw & \qw \qwx & \qswap & \qw & \qw & \qw \\
-    \lstick{\vdotswithin{I_{n-1}}} & & \vdotswithin{} & & & & & & & & & & & & & & & & & & & \qwx & \qwx & & \vdotswithin{} \\
-    \lstick{\ket{I_{n-1}}} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \cdots & & \gate{H} & \gate{R_2} & \qw & \qw \qwx & \qswap \qwx & \qw & \qw & \qw \\
-    \lstick{\ket{I_n}} & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-4} & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \cdots & & \qw & \ctrl{-1} & \gate{H} & \qswap \qwx & \qw & \qw & \qw & \qw
-}
