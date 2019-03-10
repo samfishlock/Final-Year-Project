@@ -396,6 +396,11 @@ $r$ & 15 & 16 & 47 & 63 & 110 & 1163 & 1273 & 10074 & 11347 & 32768 \\ \hline
 \end{table}
 Equation 5.3 in Shor's paper describes how we can obtain the value for $r$ from this set of values. There is at most one fraction $d/r$ with $r < N$ which satisfies the equation: $$\abs*{\frac{c}{q} - \frac{d}{r}} < \frac{1}{2q},$$ where $q$ is the power of 2 with $n^2 \leq q < 2n^2$, equal to $2^{16} = 65536$, and c is our observed value = 4170. Therefore the only values which satisfy this requirement in the table are $d = 7$ and $r = 110$. So we have obtained a value for the period of the function, $r$, as 110, now we can perform the last two steps in Shor's algorithm to calculate the factors of 253. Since $r$ is even and $a^{r/2}\mod N = 2^{55}\mod 253 = 208 \neq -1\mod 253$, our value for $r$ is correct. We can then obtain factors for 253 as $gcd(2^{55}\pm 1\mod 253, 253)$ which are 11 and 23 respectively. We can verify that $11\times 23$ is indeed equal to 253, so we have correctly obtained the prime factors of 253.
 \subsubsection{Shor's Algorithm for Discrete Logarithms}
-Shor's paper also describes a quantum routine for solving the discrete logarithm problem for a prime group $\mathbb{F}p$ \todo{Describe Shor's algorithm for discrete log briefly, then describe how it is adapated to any cyclic group using source 1 and 2}
-\subsubsection{Quantum Circuit for Discrete Logarithms}
-\subsection{Shor's Algorithm Adapted for the Elliptic and Hyperelliptic Curve Discrete Logarithm Problem}
+Shor's paper also describes an algorithm for solving the discrete logarithm problem for prime groups. This algorithm can be extended to solve the discrete logarithm problem for a generic cyclic group $G$ which has some generator $g$, and a group operation $\bigodot$, given that the group operation can be applied multiple times efficiently using quantum circuits~\cite{ekeraa2016modifying}. For a generic group such as this, we denote the process of applying the group operation a number $m$ of times to an initial element as $x = m[g]$, thus the discrete logarithm problem for a generic group such as this, is to find the discrete logarithm $m$ given $g$ and $x$. The algorithm below describes how we can solve this problem using a quantum subroutine.\\
+1. Use a quantum circuit to calculate a "good pair", $(j,k)$, on input of a generator $g$ and an element $x$ of the group $G$.\\
+2. Using a classical algorithm, compute $m$ from this good pair $(j,k)$ using the equivalence:
+$$m \equiv \frac{kq}{2^l}t^{-1}\mod q,$$ where $l$ is the length of the qubit registers in the quantum circuit, $q$ is the order of the group and $t$ is an integer that satisfies:
+$$t = \frac{\{jq\}_{2l}-jq}{2^l}\in \mathbb{Z}$$
+\subsubsection{Quantum Algorithm to Compute a Good Pair}
+\subsubsection{Quantum Circuit to Compute a Good Pair}
+\subsection{Shor's Algorithm Adapted for the Hyperelliptic Curve Discrete Logarithm Problem}
