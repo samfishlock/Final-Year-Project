@@ -1,0 +1,13 @@
+\Qcircuit @C=1em @R=.7em @!R {
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \cdots & & \qw & \ctrl{6} & \rstick{\frac{1}{\sqrt{2}}(\ket{0} + e^{2\pi i(2^{m-1}\phi)}\ket{1}}) \qw \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \cdots & & \ctrl{5} & \qw & \rstick{\frac{1}{\sqrt{2}}(\ket{0} + e^{2\pi i(2^{m-2}\phi)}\ket{1}}) \qw \\
+    & & \lstick{\vdotswithin{\ket{0}}} & \vdotswithin{} & & & & & & \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \ctrl{3} & \qw & \cdots & & \qw & \qw & \rstick{\frac{1}{\sqrt{2}}(\ket{0} + e^{2\pi i(2^{1}\phi)}\ket{1}}) \qw \\
+    & & \lstick{\ket{0}} & \gate{H} & \ctrl{2} & \qw & \qw & \cdots & & \qw & \qw & \rstick{\frac{1}{\sqrt{2}}(\ket{0} + e^{2\pi i(2^{0}\phi)}\ket{1}}) \qw \\
+    & & & & & \\
+    & & \lstick{\raisebox{-6.8em}{$\ket{\psi}$}} & \qw & \multigate{3}{U^{2^0}} & \multigate{3}{U^{2^1}} & \qw & \cdots & & \multigate{3}{U^{2^{m-1}}} & \multigate{3}{U^{2^{m-1}}} & \rstick{\raisebox{-6.8em}{$\ket{\psi}$}} \qw \\
+    & &  & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \qw & \cdots & & \ghost{U^{2^{m-2}}} & \ghost{U^{2^{m-1}}} & \qw \\
+    & &  & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \qw & \cdots & & \ghost{U^{2^{m-2}}} & \ghost{U^{2^{m-1}}} & \qw \\
+    & & & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \qw & \cdots & & \ghost{U^{2^{m-2}}} & \ghost{U^{2^{m-1}}} & \qw \\
+    {\inputgroupv{1}{5}{1em}{4em}{R_1}} \\ {\inputgroupv{7}{10}{1em}{3.1em}{R_2}} \\
+}
