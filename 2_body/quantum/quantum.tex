@@ -33,7 +33,7 @@ Where $\theta$ and $\psi$ are the relative phases, and $\gamma$ is the global ph
 If two vectors are only differing in their global phase, then they are indistinguishable when measuring, i.e. the two vectors below are the same when measured. $$\frac{-1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1} \equiv \frac{1}{\sqrt{2}}\ket{0} - \frac{1}{\sqrt{2}}\ket{1}$$ When a Hadamard transform is applied, then their relative phases become different and hence the measurements become $\ket{0}$ and $\ket{1}$ respectively. $$\frac{1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1}, \frac{1}{\sqrt{2}}\ket{0} - \frac{1}{\sqrt{2}}\ket{1}$$  We can now define phase shift gates as the gates which transform an input by rotating it along a certain axis. The base matrices for the rotations in X,Y and Z axis are defined below:
 $$X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} Y = \begin{pmatrix} 0 & i \\ -i & 0 \end{pmatrix} Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$$
 These are often referred to as Pauli-X Pauli-Y and Pauli-Z gates. More generally, we can have a rotation of a certain angle in the Z axis by using the matrix: $$\begin{pmatrix} 1 & 0 \\ 0 & e^{i\theta} \end{pmatrix},$$ which is commonly referred to the global phase shift gate, denoted as $R_\theta$.
-\subsubsection{Quantum Circuits}
+\subsection{Quantum Circuits}
 Quantum gates can be applied in a circuit in the same way that classical logic gates can. We use symbols to denote quantum gates as described in Figures \ref{fig:hadamardGate}, \ref{fig:phaseshiftGate}, \ref{fig:measurementGate} and \ref{fig:notGate}, where the lines denote inputs and outputs.
 \begin{figure}[!htb]
 \centering
@@ -56,7 +56,8 @@ Quantum gates can be applied in a circuit in the same way that classical logic g
 \caption{Quantum circuit describing NOT gate}
 \label{fig:notGate}
 \end{figure}
-More commonly in quantum circuits, we use a controlled version of gates, which means that the gate takes two inputs, one of which controls the operation of the gate, for example the controlled not (CNOT) gate flips the target qubit if the control qubit is 1, otherwise it leaves it. The controlled not gate is described in Figure \ref{fig:cnotGate}. The concept of control gates can be extended to any unitary transformation.
+\subsubsection{Control Gates and Entanglement}
+More commonly in quantum circuits, we use a controlled version of gates. An example of a control gate is the controlled not (CNOT) gate. This gate flips the target qubit if the control qubit is 1, otherwise it leaves it. The controlled not gate is described in Figure \ref{fig:cnotGate}.
 \begin{figure}[!htb]
 \centering
 \resizebox{5cm}{!}{\input{2_body/quantum/diagrams/cnotcircuit.tex}}
@@ -132,6 +133,48 @@ $$(a\ket{0} + b\ket{1}) \times (c\ket{0} + d\ket{1}),$$
 then we can represent all possible output states as
 $$ac\ket{00}, ad\ket{01}, bc\ket{10}, bd\ket{11}$$
 That means, for our state to be possible, we must have $ad,bc=0$ and $ac,bd=\frac{1}{\sqrt{2}}$. This is impossible in conventional practice, but since the quantum state does not obey the laws of classical mechanics, it is possible.
+\subsubsection{Toffoli Gate}
+Typically, classical logic gates such as NAND are irreversible, so they have no quantum representation, however there exists a quantum gate known as the Toffoli gate, invented by Tommaso Toffoli, which can simulate classical logic in a quantum circuit. The toffoli gate takes 3 qubits as input, and outputs 3 qubits. Two of the input qubits are control qubits that are unnaffected by the action of the Toffoli gate, the third qubit is the \emph{target} qubit, which is flipped if both control qubits are in state $\ket{1}$, otherwise it is left alone. The Toffoli gate can be used to simulate NAND gates in quantum circuits, which can then be used in larger circuits to simulate classical arithmetic operations. The truth table, transformation matrix and circuit diagram are shown in Table \ref{table:toffolitruth}, Figure \ref{fig:toffolimatrix} and Figure \ref{fig:toffolicircuit} respectively.
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|c||c|}
+\hline 
+\multicolumn{3}{|c||}{Input} & Output \\ 
+\hline 
+$\ket{a}$ & $\ket{b}$ & $\ket{c}$ & $\ket{c\oplus ab}$ \\ 
+\hline 
+$\ket{0}$ & $\ket{0}$ & $\ket{0}$ & $\ket{000}$ \\ 
+\hline 
+$\ket{0}$ & $\ket{0}$ & $\ket{1}$ & $\ket{001}$ \\ 
+\hline 
+$\ket{0}$ & $\ket{1}$ & $\ket{0}$ & $\ket{010}$ \\ 
+\hline 
+$\ket{0}$ & $\ket{1}$ & $\ket{1}$ & $\ket{011}$ \\ 
+\hline 
+$\ket{1}$ & $\ket{0}$ & $\ket{0}$ & $\ket{100}$ \\ 
+\hline 
+$\ket{1}$ & $\ket{0}$ & $\ket{1}$ & $\ket{101}$ \\ 
+\hline 
+$\ket{1}$ & $\ket{1}$ & $\ket{0}$ & $\ket{111}$ \\ 
+\hline 
+$\ket{1}$ & $\ket{1}$ & $\ket{1}$ & $\ket{110}$ \\ 
+\hline 
+\end{tabular} 
+\caption{Truth table for Toffoli transformation}
+\label{table:toffolitruth}
+\end{table}
+\begin{figure}[!htb]
+\centering
+\resizebox{5cm}{!}{\input{2_body/quantum/diagrams/toffolimatrix.tex}}
+\caption{Matrix representing Toffoli transformation}
+\label{fig:toffolimatrix}
+\end{figure}
+\begin{figure}[!htb]
+\centering
+\resizebox{1.5cm}{!}{\input{2_body/quantum/diagrams/toffolicircuit.tex}}
+\caption{Circuit representing Toffoli transformation}
+\label{fig:toffolicircuit}
+\end{figure}
 \subsection{Quantum Fourier Transform}
 Another key example of a quantum logic circuit which is used in many quantum algorithms is the Quantum Fourier transform. This is a quantum version of the classical discrete Fourier transform, and can be recreated in a quantum circuit with a collection of gates. The QFT allows us to find the underlying periodic behaviour of a function, and so it is useful in many quantum algorithms.
 \subsubsection{Discrete Fourier Transform} 
@@ -425,8 +468,9 @@ Roetteler, Naehrig, Svore, and Lauter~\cite{roetteler2017quantum} describe a qua
 \caption{Quantum Circuit to Solve Elliptic Curve Discrete Logarithm Problem~\cite{roetteler2017quantum}}
 \label{fig:ECDLPcircuit}
 \end{figure} 
-This high-level circuit relies on being able to calculate subsequent controlled point additions on a general elliptic curve using quantum circuits, and will be analogous to the circuit for computing the discrete logarithm problem for hyperelliptic curves, with the only difference being the implementation of the repeated group operations. The paper also describes how these point additions can be implemented for elliptic curves using basic quantum circuits. The circuits use combinations of modular additions, multiplications and inversions to calculate point additions. The toffoli gate costs for these "base" operations are shown in Table \ref{table:gateCosts}. 
+This high-level circuit relies on being able to calculate subsequent controlled point additions on a general elliptic curve using quantum circuits, and will be analogous to the circuit for computing the discrete logarithm problem for hyperelliptic curves, with the only difference being the implementation of the repeated group operations. The paper also describes how these point additions can be implemented for elliptic curves using basic quantum circuits. The circuits use combinations of modular additions, multiplications and inversions to calculate point additions. The Toffoli gate costs for these "base" operations are shown in Table \ref{table:gateCosts}. 
 \begin{table}
+\resizebox{\textwidth}{!}{
 \begin{tabular}{|c|c|c|c|}
 \hline 
 Modular Arithmetic Circuit & \multicolumn{2}{c|}{Number of Qubits} & Number of Toffoli Gates \\ 
@@ -454,8 +498,14 @@ squ\_modp (Montgomery) & $4n+5$ & $2n+5$ & $16n^2\log_2(n) -26.3n^2$ \\
 \hline 
 inv\_modp & $7n+2\lceil\log_2(n)\rceil + 9$ & $5n+2\lceil\log_2(n)\rceil+9$ & $32n^2\log_2(n)$ \\ 
 \hline 
-\end{tabular} 
+\end{tabular}} 
 \caption{Costs for modular arithmetic in quantum circuits in terms of $n$, the bit-size of the prime which the group is defined over~\cite{roetteler2017quantum}}
 \label{table:gateCosts}
 \end{table}
-Using this, and the algorithms for hyperelliptic curve arithmetic, we are able to calculate the number of toffoli gates required in a circuit which solves the discrete logarithm problem for a hyperelliptic curve.
+Using this, and the algorithms for hyperelliptic curve arithmetic, we are able to calculate the number of Toffoli gates required in a circuit which solves the discrete logarithm problem for a hyperelliptic curve. The total number of qubits needed in the circuit for elliptic curves is: 
+$$9n+2\lceil\log_2(n)\rceil + 10$$, this is calculated from the maximum required qubit size for modular arithmetic operation, which is the inversion at $7n+2\lceil\log_2(n)\rceil + 9$, in addition to a qubit required for the control qubit of the overall operation, and $2n$ qubits which are required for holding the intermediate results of the inversion operation. Roetteler, Naehrig, Svore, and Lauter estimate the total number of Toffoli gates required for the elliptic curve discrete logarithm problem is in the order 
+$$(448\log_2(n)+4090)n^3$$
+This result is found by calculating the number of gates required for one point addition, which contains 4 inversions, 2 squarers and 4 multipliers:
+$$224n^2\log_2(n) + 2045n^2$$
+and multiplying by $2n$, which is the number of consecutive point additions that are required.
+Using this method, we can calculate the number of required qubits and Toffoli gates required to solve the hyperelliptic curve discrete logarithm problem, the results of which are displayed in the next section.
