@@ -1,7 +1,8 @@
 This section will introduce the field of Quantum Computing, the theories and concepts and some algorithms, leading up to an adaptation of Shor's algorithm for discrete logarithms.
 \subsection{Properties of Quantum Computers}
 \subsubsection{Qubits}
-To begin to describe quantum computing, we can start at the very basis of the concept. The basis of a classical computer is a bit, consisting of some transistor which can either have a voltage or not, i.e. the bit holds either a 1 or a 0. In a similar way, we can define the notion of a \emph{qubit}, the equivalent to a classical bit, and how it is physically implemented. Many particles and atoms posess a quality called "magnetic spin", which means that they can be deflected under a magnetic field. A particle's spin can either be up spin or down spin, meaning that the particle will either be deflected up or down when subject to a magnetic field, particles will never be deflected to the side or any other direction. Until we measure this spin property, the particle exists in a "superposition" of both up and down spin, and we have no way of predicting which type of spin the particle will have. Once the spin of the particle is measured, then this superposition collapses and the particle behaves in a non quantum way. A way of representing this spin is to assign a probability to each state as such: $$\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$$ Where $\ket{\psi}$ represents the superposition of the particle, $\alpha_0\ket{0}$ represents the probability $\alpha_0$ of the particle having up spin $\ket{0}$, and $\alpha_1\ket{1}$ represents the probability of the particle having down spin. The notation $\ket{0}$ is known as \emph{ket} notation, and is used frequently when describing quantum computing. This superposition then becomes our qubit, on which we can perform various operations to affect the output value, and the building block from which we can build a quantum system.
+To begin to describe quantum computing, we can start at the very basis of the concept. The basis of a classical computer is a bit, consisting of some transistor which can either have a voltage or not, i.e. the bit holds either a 1 or a 0. In a similar way, we can define the notion of a \emph{qubit}, the equivalent to a classical bit, and how it is physically implemented. Many particles and atoms posess a quality called "magnetic spin", which means that they can be deflected under a magnetic field. A particle's spin can either be up spin or down spin, meaning that the particle will either be deflected up or down when subject to a magnetic field, particles will never be deflected to the side or any other direction. Until we measure this spin property, the particle exists in a "superposition" of both up and down spin, and we have no way of predicting which type of spin the particle will have. Once the spin of the particle is measured, then this superposition collapses and the particle behaves in a non quantum way. A way of representing this spin is to assign a probability to each state as such: $$\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$$ Where $\ket{\psi}$ represents the superposition of the particle, $\alpha_0\ket{0}$ represents the probability $\alpha_0$ of the particle having up spin $\ket{0}$, and $\alpha_1\ket{1}$ represents the probability of the particle having down spin. The notation $\ket{0}$ is known as \emph{ket} notation, and is used frequently when describing quantum computing. An analogous way of representing the state of a qubit is in vector format as such: 
+$$\ket{0} \equiv \begin{pmatrix}1 \\ 0 \end{pmatrix}, \ket{1} \equiv \begin{pmatrix}0 \\ 1 \end{pmatrix}$$ This superposition then becomes our qubit, on which we can perform various operations to affect the output value, and the building block from which we can build a quantum system.
 \subsubsection{Quantum States}
 A classical system with n components, each of which can have two states (1 or 0) can be represented in full by n bits. A quantum system with n qubits would require $2^{n}$ complex number coefficients, or more precisely, the state of the quantum computer can be thought of as a point in a $2^{n}$-dimensional vector space, and for each of these $2^{n}$ states, we can represent them as a probability multiplied by a basis state, for example: $\alpha_i\ket{0010}$ means that the probability of the system being in state $\ket{0010}$ is equal to $\alpha_i$. The state of the whole system at any time can be represented by a \emph{Hilbert space} defined as:
 $$ \ket{\psi} = \alpha_0\ket{\phi_0} + \alpha_1\ket{\phi_1} + ... + \alpha_{2n-1}\ket{\phi_{2n-1}} = \sum_{i=0}^{2^{n}-1} \alpha_{i} \ket{\phi_i} $$
@@ -19,20 +20,22 @@ Using the knowledge of quantum state transformations, we can create quantum logi
 \subsubsection{Hadamard Transform}
 The Hadamard transform is a very commonly used quantum gate due to its useful properties: when the Hadamard transform is applied to a qubit, the qubit then has an equal chance of being measured as a $\ket{0}$ or a $\ket{1}$, regardless of the initial state of the qubit. The matrix for this transformation is: $$\frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$$ We can prove that for a qubit in any initial state, when this transform is applied, will become an equal superposition of all base states. Suppose we have our initial qubit in state $\ket{0}$, i.e. its coefficients are: $\begin{pmatrix} 1 \\ 0 \end{pmatrix},$ then when we apply the transform we get: $$\frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$$ The same can be shown for initial state $\ket{1}$: $$\frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} \begin{pmatrix} 0 \\ 1 \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$ The negative sign does not mean that this vector is different than our previous vector, as we can only measure the magnitude of the vector when taking a measurement. Therefore, when measuring both of these states it appears as if they are the same. The next section will describe how we can distinguish between these vectors. For an $n$ qubit system, we can apply $n$ Hadamard transform gates in parallel to gain a balanced superposition of all possible states.
 \subsubsection{Phase Shift Gates}
-There are a group of quantum logic gates which can be grouped under the set of "phase shift gates". These gates perform a rotation around a certain axis when applied to a qubit. To understand how these rotations work, it is helpful to think of qubit states as being a vector in a 3 dimensional unit sphere, where the typical notation: $$\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$$ can be represented as: 
-\begin{align*} \ket{\psi} &= e^{i\gamma}(\cos{\frac{\theta}{2}}\ket{0} + (\cos{\phi} + i\sin{\phi})\sin{\frac{\theta}{2}}\ket{1}) \\
-&= e^{i\gamma}(\cos{\frac{\theta}{2}}\ket{0} + e^{i\phi}\sin{\frac{\theta}{2}}\ket{1}),
+There are a group of quantum logic gates which can be grouped under the set of "phase shift gates". These gates perform a rotation around a certain axis when applied to a qubit. To understand how these rotations work, we can introduce the idea of qubit states being represented as a vector in a 3 dimensional unit sphere, where the typical notation: $$\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$$ can be represented as: 
+\begin{align*} \ket{\psi} &= e^{i\gamma}(\cos{\frac{\theta}{2}}\ket{0} + (\cos{\varphi} + i\sin{\varphi})\sin{\frac{\theta}{2}}\ket{1}) \\
+&= e^{i\gamma}(\cos{\frac{\theta}{2}}\ket{0} + e^{i\varphi}\sin{\frac{\theta}{2}}\ket{1}),
 \end{align*}
-Where $\theta$ and $\psi$ are the relative phases, and $\gamma$ is the global phase of the vector. Figure \ref{fig:3Dvector} describes this. 
+Where $\theta$ and $\varphi$ are the relative phases, and $\gamma$ is the global phase of the vector~\cite{nielsen2002quantum}. The global phase has no observable effects~\cite{nielsen2002quantum}, so commonly this is ignored, and the qubit can be represented as 
+$$\cos{\frac{\theta}{2}}\ket{0} + e^{i\varphi}\sin{\frac{\theta}{2}}\ket{1}$$ 
+The parameters $\theta$ and $\varphi$ vary between $[0,\pi]$ and $[0,2\pi]$ respectively, and this allows any vector on the unit sphere to be represented, as shown in Figure \ref{fig:3Dvector}.
 \begin{figure}[!htb]
 \centering
 \resizebox{7cm}{!}{\input{2_body/quantum/diagrams/3Dvector.tex}}
 \caption{Vector Representation of Qubit Position}
 \label{fig:3Dvector}
 \end{figure}
-If two vectors are only differing in their global phase, then they are indistinguishable when measuring, i.e. the two vectors below are the same when measured. $$\frac{-1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1} \equiv \frac{1}{\sqrt{2}}\ket{0} - \frac{1}{\sqrt{2}}\ket{1}$$ When a Hadamard transform is applied, then their relative phases become different and hence the measurements become $\ket{0}$ and $\ket{1}$ respectively. $$\frac{1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1}, \frac{1}{\sqrt{2}}\ket{0} - \frac{1}{\sqrt{2}}\ket{1}$$  We can now define phase shift gates as the gates which transform an input by rotating it along a certain axis. The base matrices for the rotations in X,Y and Z axis are defined below:
+Before a qubit is observed, it can be in any position on the Bloch sphere, however after it is measured, it collapses to one of the poles, $\ket{0}$ or $\ket{1}$. Which pole it collapses to depends on the direction of the vector, specifically its z value. If the qubit has a positive z value, then it is more likely to collapse to $\ket{0}$, whereas if it has a negative z value, then it is more likely to collapse to $\ket{1}$. We can now define phase shift gates as the gates which transform an input by rotating it along a certain axis. The matrices for the rotations in X,Y and Z axis through an angle of $\pi$ are defined below:
 $$X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} Y = \begin{pmatrix} 0 & i \\ -i & 0 \end{pmatrix} Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$$
-These are often referred to as Pauli-X Pauli-Y and Pauli-Z gates. More generally, we can have a rotation of a certain angle in the Z axis by using the matrix: $$\begin{pmatrix} 1 & 0 \\ 0 & e^{i\theta} \end{pmatrix},$$ which is commonly referred to the global phase shift gate, denoted as $R_\theta$.
+These are often referred to as Pauli-X Pauli-Y and Pauli-Z gates. More generally, we can have a rotation of a certain angle in the Z axis by using the matrix: $$\begin{pmatrix} 1 & 0 \\ 0 & e^{i\theta} \end{pmatrix},$$ denoted as $R_\theta$. We can note that the Pauli-X matrix is the same as the quantum NOT gate, this is because a rotation around the x-axis of degree $\pi$ will invert the z component of the vector representing the qubit, and thus invert the probabilities $\alpha$ and $\beta$ of the qubit being in state $\ket{0}$ and $\ket{1}$ when observed.
 \subsection{Quantum Circuits}
 Quantum gates can be applied in a circuit in the same way that classical logic gates can. We use symbols to denote quantum gates as described in Figures \ref{fig:hadamardGate}, \ref{fig:phaseshiftGate}, \ref{fig:measurementGate} and \ref{fig:notGate}, where the lines denote inputs and outputs.
 \begin{figure}[!htb]
@@ -176,9 +179,9 @@ $\ket{1}$ & $\ket{1}$ & $\ket{1}$ & $\ket{110}$ \\
 \label{fig:toffolicircuit}
 \end{figure}
 \subsection{Quantum Fourier Transform}
-Another key example of a quantum logic circuit which is used in many quantum algorithms is the Quantum Fourier transform. This is a quantum version of the classical discrete Fourier transform, and can be recreated in a quantum circuit with a collection of gates. The QFT allows us to find the underlying periodic behaviour of a function, and so it is useful in many quantum algorithms.
+Another key example of a quantum logic circuit which is used in many quantum algorithms is the quantum Fourier transform. This is a quantum version of the classical discrete Fourier transform, and can be recreated in a quantum circuit with a collection of gates. The QFT allows us to find the underlying periodic behaviour of a function, and so it is useful in many quantum algorithms.
 \subsubsection{Discrete Fourier Transform} 
-To understand how the Quantum Fourier transform allows us to find the period of a function, we can look at the classical discrete Fourier transform. The discrete Fourier transform essentially allows us to take a finite sequence of equally spaced samples of an input function with high noise and find the underlying periodic behaviour. This transformation is useful because it can break down a seemingly random signal composed of many different frequency waves into its component parts. The transformation is done using properties of sinusoidal waves and Euler's formula.
+To understand how the quantum Fourier transform allows us to find the period of a function, we can look at the classical discrete Fourier transform. The discrete Fourier transform essentially allows us to take a finite sequence of equally spaced samples of an input function with high noise and find the underlying periodic behaviour. This transformation is useful because it can break down a seemingly random signal composed of many different frequency waves into its component parts. The transformation is done using properties of sinusoidal waves and Euler's formula.
 For a simple example of the discrete Fourier transform, we can apply it to a sample of a sine wave with frequency 1Hz and amplitude 1:
 \begin{figure}[!htb]
 \centering
@@ -247,7 +250,7 @@ The Nyquist limit is the highest frequency that can be coded at a given sampling
 \caption{Angle between positive real axis and sample}
 \label{fig:complex}
 \end{figure}
-The angle $\theta$ is equal to $\frac{3\pi}{2}$, which is our phase shift from a normal cosine wave. This method can be used for any type of sample, and the results will be normalised against a cosine wave, so we can use it for statistical analysis of the sample.
+The angle $\theta$ is equal to $\frac{3\pi}{2}$, which is our phase shift from a normal cosine wave. As discussed before, the Fourier transform can extract the underlying periodic behaviour of a function, given enough input points.
 \begin{figure}[!htb]
 \centering
 \resizebox{8cm}{!}{\input{2_body/quantum/diagrams/phase.tex}}
@@ -255,7 +258,7 @@ The angle $\theta$ is equal to $\frac{3\pi}{2}$, which is our phase shift from a
 \label{fig:phase}
 \end{figure}
 \subsubsection{Applying the Quantum Fourier Transform}
-The Quantum Fourier transform (QFT) works in a similar way as the discrete fourier transform, with the one major difference being that the QFT takes quantum states as inputs and outputs. It takes the quantum state $\ket{x} = \sum_{j=0}^{N-1}x_j\ket{i}$ and maps it to the quantum state  $\sum_{k=0}^{N-1}y_k\ket{k}$ according to the formula:
+The quantum Fourier transform (QFT) works in a similar way as the discrete fourier transform, with the one major difference being that the QFT takes quantum states as inputs and outputs. It takes the quantum state $\ket{x} = \sum_{j=0}^{N-1}x_j\ket{i}$ and maps it to the quantum state  $\sum_{k=0}^{N-1}y_k\ket{k}$ according to the formula:
 $$y_k = \frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}x_j\cdot{e^{2\pi ijk/N}}$$
 Consider the 2-qubit state $\ket{x} = a_0\ket{00} + a_1\ket{01} + a_2\ket{10} + a_3\ket{11}$, in this state, then we have $N = 2^2 = 4$. We can apply the QFT to each instance by subsituting in k as 0,1,2,3 respectively as follows:
 $$y_0 = \frac{1}{2}\sum_{j=0}^{3}a_j=\frac{1}{2}(a_{00}+a_{01}+a_{10}+a_{11})$$
@@ -283,12 +286,13 @@ $$F = \frac{1}{2}
 1 & -i & -1 & i \\
 \end{pmatrix}
 $$
+The advantage that the quantum Fourier transform has over the discrete Fourier transform is that, due to the ability for inputs to be in a superposition of states, more inputs can be supplied simultaneously, allowing for a faster calculation of the periodic behaviour of a function.
 \subsubsection{Quantum Fourier Transform Circuit}
-The Quantum Fourier transform can be represented as a quantum circuit, and we can prove that this performs the same transformation that we just obtained by observing the matrix for the transformation of the whole circuit. The QFT for a two qubit circuit is shown in Figure \ref{fig:qft2qubit}.
+The quantum Fourier transform can be represented as a quantum circuit, and we can prove that this performs the same transformation that we just obtained by observing the matrix for the transformation of the whole circuit. The QFT for a two qubit circuit is shown in Figure \ref{fig:qft2qubit}.
 \begin{figure}[!htb]
 \centering
 \resizebox{5cm}{!}{\input{2_body/quantum/diagrams/QFT2Qubit.tex}}
-\caption{Quantum Fourier Transform for a 2-qubit circuit}
+\caption{Quantum Fourier transform for a 2-qubit circuit}
 \label{fig:qft2qubit}
 \end{figure}
 The gate at the end is called a \emph{swap} gate, and simply swaps the order of the qubits. This transformation is then as follows:
@@ -331,7 +335,7 @@ We can then split the circuit into its seperate components as shown in Figure \r
 \begin{figure}[!htb]
 \centering
 \resizebox{8cm}{!}{\input{2_body/quantum/diagrams/QFT2QubitSplit.tex}}
-\caption{Quantum Fourier Transform for a 2-qubit circuit split into components}
+\caption{Quantum Fourier transform for a 2-qubit circuit split into components}
 \label{fig:qft2qubitsplit}
 \end{figure}
 These matrices can be denoted as $H_1$, $R_c(2)$, $H_2$, and $swap$ respectively. When we multiply these matrices out:
@@ -380,13 +384,13 @@ This circuit can be extended to a circuit with any number of input and output qu
 \begin{figure}[!htb]
 \centering
 \resizebox{\linewidth}{!}{\input{2_body/quantum/diagrams/QFTnQubit.tex}}
-\caption{Quantum Fourier Transform for a n-qubit circuit}
+\caption{Quantum Fourier transform for a n-qubit circuit}
 \label{fig:QFTnQubit}
 \end{figure}
 \begin{figure}[!htb]
 \centering
 \resizebox{3cm}{!}{\input{2_body/quantum/diagrams/QFTgate.tex}}
-\caption{Quantum Fourier Transform gate}
+\caption{Quantum Fourier transform gate}
 \label{fig:QFTgate}
 \end{figure}
 \subsection{Shor's Algorithms}
@@ -450,7 +454,7 @@ $$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a}\ket{b}\k
 We then compute the value $[a]g\odot[-b]x$ for all values $a$ and $b$ in parallel, and store the result in the third register, such that the state of the system is now: 
 $$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a,b,[a]g\odot[-b]x}$$ This is equal to:
 $$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a,b,[a-bd]g}$$
-Finally, we apply two Quantum Fourier transforms to the first two registers, which puts the system in a final state:
+Finally, we apply two quantum Fourier transforms to the first two registers, which puts the system in a final state:
 $$\frac{1}{2^{2l}}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\sum_{j=0}^{2^l-1}\sum_{k=0}^{2^l-1}e^{2\pi i(aj+bk)/2^l}\ket{j,k,[a-bd]g}$$ We can then observe the system to obtain values for $(j,k)$ and $[e]g$. 
 This quantum algorithm for a general discrete logarithm problem can be represented by a quantum circuit as described in Figure \ref{fig:generalDLCircuit}.
 \begin{figure}[!htb]
@@ -468,7 +472,7 @@ Roetteler, Naehrig, Svore, and Lauter~\cite{roetteler2017quantum} describe a qua
 \caption{Quantum Circuit to Solve Elliptic Curve Discrete Logarithm Problem~\cite{roetteler2017quantum}}
 \label{fig:ECDLPcircuit}
 \end{figure} 
-This high-level circuit relies on being able to calculate subsequent controlled point additions on a general elliptic curve using quantum circuits, and will be analogous to the circuit for computing the discrete logarithm problem for hyperelliptic curves, with the only difference being the implementation of the repeated group operations. The paper also describes how these point additions can be implemented for elliptic curves using basic quantum circuits. The circuits use combinations of modular additions, multiplications and inversions to calculate point additions. The Toffoli gate costs for these "base" operations are shown in Table \ref{table:gateCosts}. 
+This high-level circuit relies on being able to calculate subsequent controlled point additions on a general elliptic curve using quantum circuits, and will be analogous to the circuit for computing the discrete logarithm problem for hyperelliptic curves, with the only difference being the implementation of the repeated group operations. The paper also describes how these point additions can be implemented for elliptic curves using basic quantum circuits. The circuits use combinations of modular additions, multiplications and inversions to calculate point additions. These "base" arithmetic operations can be constructed with circuits of Toffoli gates, the Toffoli gate costs for these base operations are shown in Table \ref{table:gateCosts}. 
 \begin{table}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{|c|c|c|c|}
@@ -502,10 +506,10 @@ inv\_modp & $7n+2\lceil\log_2(n)\rceil + 9$ & $5n+2\lceil\log_2(n)\rceil+9$ & $3
 \caption{Costs for modular arithmetic in quantum circuits in terms of $n$, the bit-size of the prime which the group is defined over~\cite{roetteler2017quantum}}
 \label{table:gateCosts}
 \end{table}
-Using this, and the algorithms for hyperelliptic curve arithmetic, we are able to calculate the number of Toffoli gates required in a circuit which solves the discrete logarithm problem for a hyperelliptic curve. The total number of qubits needed in the circuit for elliptic curves is: 
-$$9n+2\lceil\log_2(n)\rceil + 10$$, this is calculated from the maximum required qubit size for modular arithmetic operation, which is the inversion at $7n+2\lceil\log_2(n)\rceil + 9$, in addition to a qubit required for the control qubit of the overall operation, and $2n$ qubits which are required for holding the intermediate results of the inversion operation. Roetteler, Naehrig, Svore, and Lauter estimate the total number of Toffoli gates required for the elliptic curve discrete logarithm problem is in the order 
+The total number of qubits needed in the circuit for elliptic curves is: 
+$$9n+2\lceil\log_2(n)\rceil + 10,$$ this is calculated from the maximum required qubit size for modular arithmetic operation, which is the inversion at $7n+2\lceil\log_2(n)\rceil + 9$, in addition to a qubit required for the control qubit of the overall operation, and $2n$ qubits which are required for holding the intermediate results of the inversion operation. Roetteler, Naehrig, Svore, and Lauter estimate the total number of Toffoli gates required for the elliptic curve discrete logarithm problem is in the order 
 $$(448\log_2(n)+4090)n^3$$
 This result is found by calculating the number of gates required for one point addition, which contains 4 inversions, 2 squarers and 4 multipliers:
 $$224n^2\log_2(n) + 2045n^2$$
 and multiplying by $2n$, which is the number of consecutive point additions that are required.
-Using this method, we can calculate the number of required qubits and Toffoli gates required to solve the hyperelliptic curve discrete logarithm problem, the results of which are displayed in the next section.
+Using this method, we can calculate the number of required qubits and Toffoli gates required to solve the hyperelliptic curve discrete logarithm problem, the results of which are displayed in the results section.
