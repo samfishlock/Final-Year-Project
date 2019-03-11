@@ -396,11 +396,66 @@ $r$ & 15 & 16 & 47 & 63 & 110 & 1163 & 1273 & 10074 & 11347 & 32768 \\ \hline
 \end{table}
 Equation 5.3 in Shor's paper describes how we can obtain the value for $r$ from this set of values. There is at most one fraction $d/r$ with $r < N$ which satisfies the equation: $$\abs*{\frac{c}{q} - \frac{d}{r}} < \frac{1}{2q},$$ where $q$ is the power of 2 with $n^2 \leq q < 2n^2$, equal to $2^{16} = 65536$, and c is our observed value = 4170. Therefore the only values which satisfy this requirement in the table are $d = 7$ and $r = 110$. So we have obtained a value for the period of the function, $r$, as 110, now we can perform the last two steps in Shor's algorithm to calculate the factors of 253. Since $r$ is even and $a^{r/2}\mod N = 2^{55}\mod 253 = 208 \neq -1\mod 253$, our value for $r$ is correct. We can then obtain factors for 253 as $gcd(2^{55}\pm 1\mod 253, 253)$ which are 11 and 23 respectively. We can verify that $11\times 23$ is indeed equal to 253, so we have correctly obtained the prime factors of 253.
 \subsubsection{Shor's Algorithm for Discrete Logarithms}
-Shor's paper also describes an algorithm for solving the discrete logarithm problem for prime groups. This algorithm can be extended to solve the discrete logarithm problem for a generic cyclic group $G$ which has some generator $g$, and a group operation $\bigodot$, given that the group operation can be applied multiple times efficiently using quantum circuits~\cite{ekeraa2016modifying}. For a generic group such as this, we denote the process of applying the group operation a number $m$ of times to an initial element as $x = m[g]$, thus the discrete logarithm problem for a generic group such as this, is to find the discrete logarithm $m$ given $g$ and $x$. The algorithm below describes how we can solve this problem using a quantum subroutine.\\
+Shor's paper also describes an algorithm for solving the discrete logarithm problem for prime groups. This algorithm can be extended to solve the discrete logarithm problem for a generic cyclic group $G$ which has some generator $g$, and a group operation $\odot$, given that the group operation can be applied multiple times efficiently using quantum circuits~\cite{ekeraa2016modifying}. For a generic group such as this, we denote the process of applying the group operation a number $d$ of times to an initial element as $x = d[g]$, thus the discrete logarithm problem for a generic group such as this, is to find the discrete logarithm $d$ given $g$ and $x$. The algorithm below describes how we can solve this problem using a quantum subroutine.\\
 1. Use a quantum circuit to calculate a "good pair", $(j,k)$, on input of a generator $g$ and an element $x$ of the group $G$.\\
-2. Using a classical algorithm, compute $m$ from this good pair $(j,k)$ using the equivalence:
-$$m \equiv \frac{kq}{2^l}t^{-1}\mod q,$$ where $l$ is the length of the qubit registers in the quantum circuit, $q$ is the order of the group and $t$ is an integer that satisfies:
+2. Using a classical algorithm, compute $d$ from this good pair $(j,k)$ using the equivalence:
+$$d \equiv \frac{kq}{2^l}t^{-1}\mod q,$$ where $l$ is the length of the qubit registers in the quantum circuit, $q$ is the order of the group and $t$ is an integer that satisfies:
 $$t = \frac{\{jq\}_{2l}-jq}{2^l}\in \mathbb{Z}$$
-\subsubsection{Quantum Algorithm to Compute a Good Pair}
-\subsubsection{Quantum Circuit to Compute a Good Pair}
-\subsection{Shor's Algorithm Adapted for the Hyperelliptic Curve Discrete Logarithm Problem}
+\subsubsection{Quantum Subroutine to Compute a Good Pair}
+This section will outline the quantum algorithm described in \cite{ekeraa2016modifying}, that computes the "good pair" $(j,k)$ which allow us to find the discrete logarithm $d$ from a group member $x$ and a generator $g$. We start by finding $l$, the largest positive integer such that $2^l < q$, where $q$ is the order of the group. The first step is to create two registers of qubits of length $l$ which are initially in an equal superposition, and a third register in the state $\ket{0}$. The state of the system at this point can be viewed as: 
+$$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a}\ket{b}\ket{0}$$
+We then compute the value $[a]g\odot[-b]x$ for all values $a$ and $b$ in parallel, and store the result in the third register, such that the state of the system is now: 
+$$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a,b,[a]g\odot[-b]x}$$ This is equal to:
+$$\ket{\psi} = \frac{1}{2^l}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\ket{a,b,[a-bd]g}$$
+Finally, we apply two Quantum Fourier transforms to the first two registers, which puts the system in a final state:
+$$\frac{1}{2^{2l}}\sum_{a=0}^{2^l-1}\sum_{b=0}^{2^l-1}\sum_{j=0}^{2^l-1}\sum_{k=0}^{2^l-1}e^{2\pi i(aj+bk)/2^l}\ket{j,k,[a-bd]g}$$ We can then observe the system to obtain values for $(j,k)$ and $[e]g$. 
+This quantum algorithm for a general discrete logarithm problem can be represented by a quantum circuit as described in Figure \ref{fig:generalDLCircuit}.
+\begin{figure}[!htb]
+\centering
+\resizebox{\linewidth}{!}{\input{2_body/quantum/diagrams/generalDLCircuit.tex}}
+\caption{General Discrete Logarithm Quantum Circuit}
+\label{fig:generalDLCircuit}
+\end{figure}
+\subsection{Shor's Algorithm Adapted for the Hyperelliptic Curve Discrete
+ Logarithm Problem}
+Roetteler, Naehrig, Svore, and Lauter~\cite{roetteler2017quantum} describe a quantum circuit adapted for solving the discrete logarithm problem in elliptic curves, which is shown in Figure \ref{fig:ECDLPcircuit}.
+\begin{figure}[!htb]
+\centering
+\resizebox{\linewidth}{!}{\input{2_body/quantum/diagrams/ECDLPcircuit.tex}}
+\caption{Quantum Circuit to Solve Elliptic Curve Discrete Logarithm Problem~\cite{roetteler2017quantum}}
+\label{fig:ECDLPcircuit}
+\end{figure} 
+This high-level circuit relies on being able to calculate subsequent controlled point additions on a general elliptic curve using quantum circuits, and will be analogous to the circuit for computing the discrete logarithm problem for hyperelliptic curves, with the only difference being the implementation of the repeated group operations. The paper also describes how these point additions can be implemented for elliptic curves using basic quantum circuits. The circuits use combinations of modular additions, multiplications and inversions to calculate point additions. The toffoli gate costs for these "base" operations are shown in Table \ref{table:gateCosts}. 
+\begin{table}
+\begin{tabular}{|c|c|c|c|}
+\hline 
+Modular Arithmetic Circuit & \multicolumn{2}{c|}{Number of Qubits} & Number of Toffoli Gates \\ 
+• & Total & Ancillas & • \\ 
+\hline 
+add\_const\_modp & $2n$ & $n$ & $16n\log_2(n)-26.9n$ \\ 
+\hline 
+sub\_const\_modp & $2n$ & $n$ & $16n\log_2(n)-26.9n$ \\ 
+\hline 
+ctrl\_add\_const\_modp & $2n+1$ & $n$ & $16n\log_2(n)-26.9n$ \\ 
+\hline 
+ctrl\_sub\_const\_modp & $2n+1$ & $n$ & $16n\log_2(n)-26.9n$ \\ 
+\hline 
+ctrl\_sub\_modp & $2n+4$ & $3$ & $16n\log_2(n)-23.8n$ \\ 
+\hline 
+ctrl\_neg\_modp & $n+3$ & $2$ & $8n\log_2(n)-14.5n$ \\ 
+\hline 
+mul\_modp (dbl/add) & $3n+2$ & $2$ & $32n^2\log_2(n) -59.4n^2$ \\ 
+\hline 
+mul\_modp (Montgomery) & $5n+4$ & $2n+4$ & $16n^2\log_2(n) -26.3n^2$ \\ 
+\hline 
+squ\_modp (dbl/add) & $2n+3$ & $3$ & $32n^2\log_2(n) -59.4n^2$ \\ 
+\hline 
+squ\_modp (Montgomery) & $4n+5$ & $2n+5$ & $16n^2\log_2(n) -26.3n^2$ \\ 
+\hline 
+inv\_modp & $7n+2\lceil\log_2(n)\rceil + 9$ & $5n+2\lceil\log_2(n)\rceil+9$ & $32n^2\log_2(n)$ \\ 
+\hline 
+\end{tabular} 
+\caption{Costs for modular arithmetic in quantum circuits in terms of $n$, the bit-size of the prime which the group is defined over~\cite{roetteler2017quantum}}
+\label{table:gateCosts}
+\end{table}
+Using this, and the algorithms for hyperelliptic curve arithmetic, we are able to calculate the number of toffoli gates required in a circuit which solves the discrete logarithm problem for a hyperelliptic curve.
