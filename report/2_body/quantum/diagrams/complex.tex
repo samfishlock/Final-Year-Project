@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+\draw[->,thick] (-2.5,0)--(2.5,0) node[right]{$real$};
+\draw[->,thick] (0,-2.5)--(0,2.5) node[above]{$imaginary (i)$};
+\draw[->,ultra thick, orange] (0,0)--(0,-2) node[left, black]{$0-8i$};
+\coordinate (x) at (1.5,0);
+\coordinate (y) at (0,0);
+\coordinate (z) at (270:1);
+\pic[draw,pic text=$\theta$,angle radius=20pt,angle eccentricity=1.3,->, thick]{angle=x--y--z};
+\end{tikzpicture}

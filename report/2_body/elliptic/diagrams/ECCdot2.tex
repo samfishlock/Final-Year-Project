@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+\pgfplotsset{ticks=none}
+\begin{axis}[
+        xmin=-4,xmax=5,
+        ymin=-5,ymax=5,
+        xlabel={$x$},
+        ylabel={$y$},
+        scale only axis, axis lines=middle,
+        domain=-2.279018:3,
+        samples=201,smooth,clip=false,
+        axis equal image=true
+    ]
+\addplot[red] {sqrt(x^3-3*x+5)};
+\addplot[red] {-sqrt(x^3-3*x+5)};
+\draw [] (0.758, -1.778) -- (2.264,-3.132);
+\draw [dashed] (0.758, -1.778) -- (0.758, 1.778);
+\draw [dashed] (0.758, -1.778) -- (-2.213,0.893);
+\draw [fill=black] (-2.213,0.893) circle (1pt);
+\draw [color=black] (-2.213,0.893) node [left]{$P$};
+\draw [fill=black] (2.264,-3.132) circle (1pt);
+\draw [color=black] (2.264,-3.132) node [right]{$R$};
+\draw [fill=black] (0.758, -1.778) circle (1pt);
+\draw [color=black] (0.758, -1.778) node [below]{$S'$};
+\draw [fill=black] (0.758, 1.778)  circle (1pt);
+\draw [color=black] (0.758, 1.778) node [above]{$S$};
+\end{axis}
+\end{tikzpicture}

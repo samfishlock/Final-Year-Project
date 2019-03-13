@@ -1,0 +1,19 @@
+\Qcircuit @C=1em @R=.7em @!R {
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{11} & \multigate{9}{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{10} & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{9} & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \ctrl{8} & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \ctrl{7} & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \qw & \ctrl{6} & \qw & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \qw & \ctrl{5} & \qw & \qw & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \qw & \ctrl{4} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \qw & \ctrl{3} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & \lstick{\ket{0}} & \gate{H} & \ctrl{2} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \ghost{FT^\dag} & \meter \\
+    & & & & & \\
+    & & \lstick{\ket{1}} & \qw & \multigate{4}{U^{2^0}} & \multigate{4}{U^{2^1}} & \multigate{4}{U^{2^2}} & \multigate{4}{U^{2^3}} & \multigate{4}{U^{2^4}} & \multigate{4}{U^{2^5}} & \multigate{4}{U^{2^6}} & \multigate{4}{U^{2^7}} & \multigate{4}{U^{2^8}} & \multigate{4}{U^{2^9}}  & \qw & \rstick{\ket{1}} \qw \\
+    & & \lstick{\ket{1}} & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \ghost{U^{2^2}} & \ghost{U^{2^3}} & \ghost{U^{2^4}} & \ghost{U^{2^5}} & \ghost{U^{2^6}} & \ghost{U^{2^7}} & \ghost{U^{2^8}} & \ghost{U^{2^9}} & \qw & \rstick{\ket{1}} \qw \\
+    & & \lstick{\ket{1}} & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}}& \ghost{U^{2^2}} & \ghost{U^{2^3}} & \ghost{U^{2^4}} & \ghost{U^{2^5}} & \ghost{U^{2^6}} & \ghost{U^{2^7}}& \ghost{U^{2^8}} & \ghost{U^{2^9}} & \qw & \rstick{\ket{1}} \qw \\
+    & & \lstick{\ket{1}} & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \ghost{U^{2^2}} & \ghost{U^{2^3}} & \ghost{U^{2^4}} & \ghost{U^{2^5}} & \ghost{U^{2^6}} & \ghost{U^{2^7}}& \ghost{U^{2^8}} & \ghost{U^{2^9}} & \qw & \rstick{\ket{1}} \qw \\
+    & & \lstick{\ket{1}} & \qw & \ghost{U^{2^0}} & \ghost{U^{2^1}} & \ghost{U^{2^2}} & \ghost{U^{2^3}} & \ghost{U^{2^4}} & \ghost{U^{2^5}} & \ghost{U^{2^6}} & \ghost{U^{2^7}}& \ghost{U^{2^8}} & \ghost{U^{2^9}} & \qw & \rstick{\ket{1}} \qw \\
+    {\inputgroupv{1}{10}{1em}{9em}{R_1}} \\ {\inputgroupv{12}{16}{1em}{4em}{R_2}} \\
+}
