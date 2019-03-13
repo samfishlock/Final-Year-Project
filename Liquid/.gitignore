@@ -1,6 +1,0 @@
-# Ignore all bin and obj folders
-*/bin
-*/obj
-
-# Ignore log files
-Liquid.log
