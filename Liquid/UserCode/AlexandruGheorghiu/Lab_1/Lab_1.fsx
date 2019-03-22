@@ -86,7 +86,11 @@ module Script =                     // The script module allows for incremental 
 
 // Implement your functions here
 ///////////////////////////////////////////
-
+    let ex6 (qs:Qubits) =
+        H qs 
+        X qs
+        H qs
+        M qs
 ///////////////////////////////////////////
 
 
@@ -102,6 +106,13 @@ module Script =                     // The script module allows for incremental 
         let qcirc = Circuit.Compile ex5 qs
         qcirc.RenderHT("Example5")
 
+    [<LQD>]
+    let Lab_1_Hw()  =
+        show "Hw"
+        let k = Ket(1)  
+        let qs = k.Qubits
+        ex6 qs
+        show "First qubit after measurement %d" qs.[0].Bit.v  
 
 #if INTERACTIVE
 do Script.Lab_1()        // If interactive, then run the routine automatically
