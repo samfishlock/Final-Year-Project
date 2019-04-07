@@ -1,0 +1,77 @@
+This section will discuss the various algorithms for hyperelliptic curve arithemtic, and calculate bounds for the gate costs for the quantum circuits in each case, to provide estimates for how large a quantum circuit is needed to break hyperelliptic curve cryptography.
+\subsection{Quantum Circuit for Shor's Algorithm on Hyperelliptic Curves}
+Using the same principle idea as the circuit for elliptic curves described in Figure \ref{fig:ECDLPcircuit}, we can construct a circuit which, given an original divisor $D_p$ of a hyperelliptic curve, and the result of some scalar multiplication on that divisor, $D_q$. This circuit contains two registers, intially in a superposition due to the parallel Hadamard transform. It then implements a series of scalar divisor multiplications, analogous to the elliptic curve case, and then performs a Quantum Fourier transform on the two registers. As stated in~\cite{roetteler2017quantum}, if we take $m$, the scalar integer which we apply to the divisor, in its binary representation, we can eliminate the need for divisor doublings by precomputing all $n$ 2-power multiples of our original divisor, $D_p$, which has the advantage that all these doubling operations can be performed on a classical computer and the quantum circuit is only required to do the generic divisor addition, reducing the complexity of the overall operation. This circuit is described in Figure \ref{fig:HECDLPCircuit}.
+\begin{figure}[!htb]
+\centering
+\resizebox{\linewidth}{!}{\input{2_body/methods/diagrams/HECDLPCircuit.tex}}
+\caption{Quantum circuit for applying Shor's algorithm on hyperelliptic curves}
+\label{fig:HECDLPCircuit}
+\end{figure}
+\subsubsection{Quantum Circuit for Divisor Addition}
+Cantor's algorithm, described in Algorithm \ref{cantor}, can be rewritten explicitly for genus 2 curves, which will be the main focus of this paper, as shown in Algorithm \ref{explicitCantor}, which has complexity $I + 22M + 3S$, to show each modular operation individually.
+\begin{algorithm}[!htb]
+\textbf{Input:} Two divisors in mumford representation: $[u_1, v_1], [u_2, v_2]$, with $u_i = x^2 +u_{i1}x + u_{i0}$, and $v_i = v_{i1}x + v_{i0}$ from curve with equation $y^2 + h(x)y = f(x)$\\
+\textbf{Output:} The divisor result $[u',v'] = [u_1,v_1] \oplus [u_2,v_2]$ 
+\caption{Hyperelliptic Curve Addition (Genus = 2, $\deg(u_1) = \deg(u_2) = 2$, adapted from~\cite{cohen2005handbook}}\label{explicitCantor}
+\algrule
+\begin{algorithmic}[1]
+\State $z_1 \longleftarrow u_{11} - u_{21}$
+\State $z_2 \longleftarrow u_{20} - u_{10}$
+\State $z_3 \longleftarrow u_{11}z_1 + z_2$
+\State $r \longleftarrow z_2z_3 + z_1^2u_{10}$
+\State $w_0 \longleftarrow v_{10} - v_{20}$
+\State $w_1 \longleftarrow v_{11} - v_{21}$
+\State $w_2 \longleftarrow z_3w_0$
+\State $w_3 \longleftarrow z_1w_1$
+\State $s'_1 \longleftarrow (z_3 + z_1)(w_0+w_1)-w_2-w_3(1+u_{11})$
+\State $s'_0 \longleftarrow w_2-u_{10}w_3$
+\State $w_1 \longleftarrow {rs'_1}^{-1}$
+\State $w_2 \longleftarrow rw_1$
+\State $w_3 \longleftarrow {s'}_1^2w_1$
+\State $w_4 \longleftarrow rw_2$
+\State $w_5 \longleftarrow w_4^2$
+\State $s''_0 \longleftarrow s'_0w_2$
+\State $l'_2 \longleftarrow u_{21} + s''_0$
+\State $l'_1 \longleftarrow u_{21}s''_0 + u_{20}$
+\State $l'_0 \longleftarrow u_{20}s''_0$
+\State $u'_0 \longleftarrow (s''_0-u{11})(s''_0 - z_1 + h_2w_4) - u{10}$
+\State $u'_0 \longleftarrow u'_0+l'_1 + (h_1 + 2v_{21})w_4 + 2u_{21} + z_1 - f_4)w_5$
+\State $u'_1 \longleftarrow 2s''_0 - z_1 + h_2w_4 - w_5$
+\State $w_1 \longleftarrow l'_2 - u'_1$
+\State $w_2 \longleftarrow u'_1w_1 + u'_0 - l'_1$
+\State $v'_1 \longleftarrow w_2w_3 - v_{21} - h_1 + h_2u'_1$
+\State $w_2 \longleftarrow u'_0w_1 - l'_0$
+\State $v'_0 \longleftarrow w_2w_3 - v_{20} - h_0 +h_2u'_0$
+\Return $[u', v'] = (x^2 + u'_1x + u'_0), (v'_1x + v'_0)$
+\end{algorithmic}
+\end{algorithm} This can then be used to construct a quantum circuit, comprised of reversible operations, which performs this algorithm. The modular arithmetic operations can be completed using the circuits described in~\cite{roetteler2017quantum}. Using the complexity of the algorithm, and the estimates for circuit costs, as shown in Table \ref{table:gateCosts}, we can calculate a rough bound for the number of low level gates required to construct this circuit. We can then get an estimate for the total number of gates required in the whole circuit for Shor's Algorithm applied to Hyperelliptic Curves, the results of which will be displayed in the next section.
+\subsection{Alternative Hyperelliptic Curve Arithmetic Algorithms}
+Cantor's algorithm is general and holds for hyperelliptic curves of any genus over any field. There are however, algorithms which use other techniques to the most costly operation, inversion.
+An example of this is the algorithm for addition in \emph{projective coordinates} over an odd characteristic field. Projective coordinates have a third coordinate, along with $x$ and $y$, conventionally named $z$. $z$ is typically constant, and we can represent a divisor in projective coordinates as $$[x^2+\frac{u_1}{z}x + \frac{u_0}{z}, \frac{v_1}{z}x + \frac{v_0}{z}]$$ From this, we can define an inversion-free algorithm, as described in~\cite{cohen2005handbook}, with complexity $47M + 4S$. We can convert the coordinates from affine (classical representation) to projective and vice versa on classical computers as preprocessing and postprocessing, to reduce the complexity of the quantum circuit. Similarly to projective coordinates, we can define a set of coordinates called \emph{new coordinates}. In this case, the denominators ($z$ values) differ for $u$ and $v$. A divisor in new coordinates can be represented by: $$[x^2 + \frac{u_1}{z_1^2}x + \frac{u_0}{z_1^2}, \frac{v_1}{z_1^3z_2}x + \frac{v_0}{z_1^3z_2}],$$ where $z_1$ and $z_2$ are the two $z$ values. The complexity of addition in new coordinates is $47M+7S$. We can also combine different sets of coordinates and define algorithms for arithmetic operations when we have mixed inputs. The costs for each combination of affine, projective and new coordinates are displayed in Table \ref{table:arithmeticCosts}. 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{1}{|c|}{Operation} & \multicolumn{1}{c|}{Complexity} \\ \hline
+$N+N=P$                         & $51M+7S$                        \\
+$N+P=P$                         & $51M+4S$                        \\
+$N+N=N$                         & $47M+7S$                        \\
+$N+P=N$                         & $48M+4S$                        \\
+$P+P=P$                         & $47M+4S$                        \\
+$P+P=N$                         & $44M+4S$                        \\
+$A+N=P$                         & $40M+5S$                        \\
+$A+P=P$                         & $40M+3S$                        \\
+$A+N=N$                         & $36M+5S$                        \\
+$A+P=N$                         & $37M+3S$                        \\
+$A+A=A$                         & $I+22M+3S$                     
+\\
+$k(A)+k(A)=k(A)$				& $31M+2S (15M+2S)$
+\\ \hline
+\end{tabular}
+\caption{Arithmetic costs for different coordinate  systems}
+\label{table:arithmeticCosts}
+\end{table}
+There also exists Montgomery form arithmetic, analogous to the case for elliptic curves which can be obtained by using Kummer surfaces~\cite{duquesne2004montgomery}. At present time of writing, this is the leading type of arithmetic in terms of complexity, and out performs equivalently secure elliptic curves~\cite{cryptoeprint:2012:670}. It involves converting the coordinates to their equivalent representation on a Kummer surface, denoted as $k(D_i)$, where $D_i$ is a divisor, which requires 16 multiplication operations. When this is added to the number of operations required for the actual algorithm ($15M+2S$), we get a result for the total number of required operations as $31M+2S$. Further investigation would be required to determine whether we could implement the conversion as pre processing to the quantum circuit, thus saving arithmetic operations.
+
+
+
