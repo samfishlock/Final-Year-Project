@@ -8,7 +8,7 @@ Using the same principle idea as the circuit for elliptic curves described in Fi
 \label{fig:HECDLPCircuit}
 \end{figure}
 \subsubsection{Quantum Circuit for Divisor Addition}
-Cantor's algorithm, described in Algorithm \ref{cantor}, can be rewritten explicitly for genus 2 curves, which will be the main focus of this paper, as shown in Algorithm \ref{explicitCantor}, which has complexity $I + 22M + 3S$, to show each modular operation individually.
+Cantor's algorithm, described in Algorithm \ref{cantor}, can be rewritten explicitly for genus 2 curves, as shown in Algorithm \ref{explicitCantor}, which has complexity $I + 22M + 3S$, to show each modular operation individually.
 \begin{algorithm}[!htb]
 \textbf{Input:} Two divisors in mumford representation: $[u_1, v_1], [u_2, v_2]$, with $u_i = x^2 +u_{i1}x + u_{i0}$, and $v_i = v_{i1}x + v_{i0}$ from curve with equation $y^2 + h(x)y = f(x)$\\
 \textbf{Output:} The divisor result $[u',v'] = [u_1,v_1] \oplus [u_2,v_2]$ 
